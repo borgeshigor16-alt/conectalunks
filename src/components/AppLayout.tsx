@@ -33,12 +33,12 @@ export function AppLayout({ children }: AppLayoutProps) {
               <div className="flex items-center gap-3 rounded-full bg-card px-2 py-1 shadow-soft">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-gradient-warm text-xs font-semibold text-primary-foreground">
-                    AS
+                    HB
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden pr-2 text-right md:block">
-                  <p className="text-xs font-semibold leading-tight">Ana Souza</p>
-                  <p className="text-[10px] text-muted-foreground">Relações Públicas</p>
+                  <p className="text-xs font-semibold leading-tight">Higor Borges</p>
+                  <p className="text-[10px] text-muted-foreground">Diretoria · RP</p>
                 </div>
               </div>
             </div>

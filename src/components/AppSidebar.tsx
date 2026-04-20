@@ -8,6 +8,7 @@ import {
   Megaphone,
   Settings,
   LogOut,
+  Gauge,
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,11 +29,12 @@ const mainItems = [
   { title: "Comunicados", url: "/comunicados", icon: Megaphone },
   { title: "Setores", url: "/setores", icon: Building2 },
   { title: "Processos", url: "/processos", icon: Workflow },
+  { title: "Indicadores", url: "/indicadores", icon: Gauge },
 ];
 
 const secondaryItems = [
-  { title: "Conhecimento", url: "/conhecimento", icon: BookOpen },
-  { title: "Pessoas", url: "/pessoas", icon: Users },
+  { title: "Base de Conhecimento", url: "/conhecimento", icon: BookOpen },
+  { title: "Pessoas Lunks", url: "/pessoas", icon: Users },
 ];
 
 export function AppSidebar() {
@@ -55,14 +57,14 @@ export function AppSidebar() {
       <SidebarHeader className="px-4 py-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-warm shadow-glow">
-            <span className="font-display text-lg font-bold text-primary-foreground">L</span>
+            <span className="font-display text-lg font-bold text-primary-foreground">C</span>
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
               <p className="font-display text-base font-bold leading-tight text-sidebar-foreground">
-                Lunks
+                ConectaLunks
               </p>
-              <p className="text-xs text-sidebar-foreground/60">Feel Connect</p>
+              <p className="text-xs text-sidebar-foreground/60">Intranet · Lunks Feel</p>
             </div>
           )}
         </div>
@@ -71,7 +73,7 @@ export function AppSidebar() {
       <SidebarContent className="px-3">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs uppercase tracking-wider text-sidebar-foreground/50">
-            Principal
+            Comunicação
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

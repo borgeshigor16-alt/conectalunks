@@ -4,78 +4,58 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   ArrowUpRight,
-  Signal,
+  Cpu,
   Users,
-  TrendingUp,
-  Headphones,
+  Activity,
+  Globe2,
   Sparkles,
   Calendar,
   Megaphone,
 } from "lucide-react";
 import heroImg from "@/assets/hero-connect.jpg";
 import { Link } from "react-router-dom";
+import { useAnnouncements, categoryStyle } from "@/store/announcements";
 
 const kpis = [
-  { label: "Linhas ativas", value: "248.5K", trend: "+4,2%", icon: Signal, tone: "primary" },
-  { label: "Colaboradores", value: "342", trend: "+8 novos", icon: Users, tone: "secondary" },
-  { label: "NPS Atendimento", value: "72", trend: "+5 pts", icon: Headphones, tone: "success" },
-  { label: "Churn mensal", value: "1,8%", trend: "-0,3%", icon: TrendingUp, tone: "info" },
-];
-
-const announcements = [
-  {
-    tag: "Lançamento",
-    color: "bg-primary/10 text-primary border-primary/20",
-    title: "Nova oferta Lunks Família 80GB entra em vigor segunda-feira",
-    author: "Marketing",
-    time: "há 2 horas",
-  },
-  {
-    tag: "Operações",
-    color: "bg-info/10 text-info border-info/20",
-    title: "Janela de manutenção do Core 5G — domingo 02h às 05h",
-    author: "Engenharia de Rede",
-    time: "há 5 horas",
-  },
-  {
-    tag: "Pessoas",
-    color: "bg-secondary/20 text-secondary-foreground border-secondary/30",
-    title: "Inscrições abertas para o programa Conecta Liderança 2026",
-    author: "Recursos Humanos",
-    time: "ontem",
-  },
+  { label: "SIM Cards M2M ativos", value: "186K", trend: "+6,4% MoM", icon: Cpu },
+  { label: "Colaboradores", value: "62", trend: "+2 novos", icon: Users },
+  { label: "Países FL+LATAM", value: "14", trend: "+ Chile, Peru", icon: Globe2 },
+  { label: "Engajamento intranet", value: "78%", trend: "Meta ≥ 80%", icon: Activity },
 ];
 
 const events = [
-  { day: "23", month: "ABR", title: "All-Hands trimestral", time: "10h00 · Auditório + Online" },
-  { day: "28", month: "ABR", title: "Workshop de portabilidade", time: "14h00 · Sala Conexão" },
-  { day: "05", month: "MAI", title: "Lançamento campanha 'Sinta Lunks'", time: "09h00 · Marketing" },
+  { day: "23", month: "ABR", title: "Workshop sensibilização — Fase 1", time: "10h00 · Aud. Vergueiro" },
+  { day: "28", month: "ABR", title: "'Fala com a Diretoria' — Q1/2026", time: "14h00 · Online" },
+  { day: "05", month: "MAI", title: "Comitê Intersetorial #02", time: "09h00 · Sala Conexão" },
+  { day: "10", month: "MAI", title: "Treinamento Anatel — Suporte", time: "13h30 · Sala Apólo" },
 ];
 
 const Index = () => {
+  const { announcements } = useAnnouncements();
+  const featured = [...announcements].sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned)).slice(0, 4);
+
   return (
     <div className="space-y-8">
-      {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl shadow-warm">
         <img
           src={heroImg}
-          alt="Lunks Feel Connect — comunicação que aproxima"
+          alt="ConectaLunks — intranet da Lunks Feel do Brasil"
           width={1536}
           height={768}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/75 via-foreground/45 to-transparent" />
         <div className="relative grid gap-6 p-8 md:grid-cols-2 md:p-12">
           <div className="text-primary-foreground">
             <Badge className="mb-4 border-0 bg-background/20 text-primary-foreground backdrop-blur-md">
-              <Sparkles className="mr-1 h-3 w-3" /> Bem-vinda, Ana
+              <Sparkles className="mr-1 h-3 w-3" /> Bem-vindo, Higor
             </Badge>
             <h1 className="font-display text-4xl font-bold leading-[1.05] md:text-5xl">
-              Tudo que conecta a Lunks <em className="text-secondary not-italic">em um só lugar.</em>
+              ConectaLunks. <em className="text-secondary not-italic">A intranet que integra todos os setores.</em>
             </h1>
             <p className="mt-4 max-w-md text-base text-primary-foreground/85">
-              Comunicados, processos, pessoas e indicadores integrados — para que cada setor fale
-              a mesma língua.
+              Plano de comunicação integrada interna desenvolvido pela <strong>Entrementes HB</strong> para
+              fortalecer a Lunks Feel do Brasil — MVNO de M2M e IoT.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button variant="hero" size="lg" asChild>
@@ -84,14 +64,13 @@ const Index = () => {
                 </Link>
               </Button>
               <Button variant="soft" size="lg" asChild>
-                <Link to="/processos">Explorar processos</Link>
+                <Link to="/indicadores">Indicadores do plano</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* KPIs */}
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((kpi, i) => (
           <Card
@@ -115,7 +94,6 @@ const Index = () => {
         ))}
       </section>
 
-      {/* Comunicados + agenda */}
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="border-border/60 p-6 shadow-soft lg:col-span-2">
           <div className="mb-5 flex items-center justify-between">
@@ -130,9 +108,10 @@ const Index = () => {
             </Button>
           </div>
           <div className="space-y-3">
-            {announcements.map((a) => (
-              <div
-                key={a.title}
+            {featured.map((a) => (
+              <Link
+                to="/comunicados"
+                key={a.id}
                 className="group flex cursor-pointer items-start gap-4 rounded-2xl border border-transparent p-4 transition-smooth hover:border-border hover:bg-muted/40"
               >
                 <Avatar className="h-10 w-10 shrink-0">
@@ -141,17 +120,17 @@ const Index = () => {
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <Badge variant="outline" className={`mb-2 ${a.color}`}>
-                    {a.tag}
+                  <Badge variant="outline" className={`mb-2 ${categoryStyle(a.category)}`}>
+                    {a.category}
                   </Badge>
                   <p className="font-medium leading-snug text-foreground group-hover:text-primary">
                     {a.title}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {a.author} · {a.time}
+                    {a.author} · {new Date(a.date).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </Card>
@@ -159,7 +138,7 @@ const Index = () => {
         <Card className="border-border/60 p-6 shadow-soft">
           <div className="mb-5 flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
-            <h2 className="font-display text-xl font-bold">Próximos eventos</h2>
+            <h2 className="font-display text-xl font-bold">Agenda da Fase 1</h2>
           </div>
           <div className="space-y-4">
             {events.map((e) => (
@@ -169,8 +148,8 @@ const Index = () => {
                   <span className="text-[10px] font-semibold tracking-wider">{e.month}</span>
                 </div>
                 <div className="pt-1">
-                  <p className="font-medium text-foreground">{e.title}</p>
-                  <p className="text-xs text-muted-foreground">{e.time}</p>
+                  <p className="font-medium leading-tight text-foreground">{e.title}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{e.time}</p>
                 </div>
               </div>
             ))}

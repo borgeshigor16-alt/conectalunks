@@ -1,90 +1,123 @@
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Megaphone, Filter, Pin } from "lucide-react";
+import { Megaphone, Pin, Plus, Pencil, Trash2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-
-const items = [
-  {
-    pinned: true,
-    tag: "Lançamento",
-    color: "bg-primary/10 text-primary border-primary/20",
-    title: "Nova oferta Lunks Família 80GB entra em vigor segunda-feira",
-    excerpt:
-      "A partir de 22/04 o time comercial deve usar o novo material de venda. Argumentário e FAQ disponíveis na Base de Conhecimento.",
-    author: "Marketing",
-    time: "há 2 horas",
-  },
-  {
-    tag: "Operações",
-    color: "bg-info/10 text-info border-info/20",
-    title: "Janela de manutenção do Core 5G — domingo 02h às 05h",
-    excerpt:
-      "Atendimento deve estar preparado para fluxo elevado de chamadas no domingo de manhã. Roteiro de contingência atualizado.",
-    author: "Engenharia de Rede",
-    time: "há 5 horas",
-  },
-  {
-    tag: "Pessoas",
-    color: "bg-secondary/20 text-secondary-foreground border-secondary/30",
-    title: "Inscrições abertas para o programa Conecta Liderança 2026",
-    excerpt:
-      "RH abre 30 vagas para o programa de desenvolvimento de líderes. Inscrições até 30/04 pelo portal interno.",
-    author: "Recursos Humanos",
-    time: "ontem",
-  },
-  {
-    tag: "Regulatório",
-    color: "bg-destructive/10 text-destructive border-destructive/20",
-    title: "Atualização da Resolução Anatel 740 — impactos no SAC",
-    excerpt:
-      "Compliance preparou um resumo executivo dos novos prazos de resposta. Treinamento obrigatório até 10/05.",
-    author: "Jurídico & Compliance",
-    time: "2 dias",
-  },
-  {
-    tag: "Cultura",
-    color: "bg-accent text-accent-foreground border-accent",
-    title: "Resultados da pesquisa de clima 2025 — eNPS sobe para 64",
-    excerpt:
-      "Crescimento expressivo nos pilares de comunicação e reconhecimento. Confira o relatório completo.",
-    author: "Pessoas & Cultura",
-    time: "3 dias",
-  },
-];
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Announcement, useAnnouncements, categoryStyle } from "@/store/announcements";
+import { AnnouncementForm } from "@/components/AnnouncementForm";
+import { toast } from "sonner";
 
 const Comunicados = () => {
+  const { announcements, remove, togglePin } = useAnnouncements();
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<Announcement | null>(null);
+  const [confirming, setConfirming] = useState<Announcement | null>(null);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<string>("all");
+
+  const filtered = useMemo(() => {
+    return announcements
+      .filter((a) => (filter === "all" ? true : a.category === filter))
+      .filter((a) =>
+        search.trim() === ""
+          ? true
+          : (a.title + a.excerpt + a.author).toLowerCase().includes(search.toLowerCase()),
+      )
+      .sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned));
+  }, [announcements, filter, search]);
+
+  const handleEdit = (a: Announcement) => {
+    setEditing(a);
+    setOpen(true);
+  };
+
+  const handleNew = () => {
+    setEditing(null);
+    setOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (confirming) {
+      remove(confirming.id);
+      toast.success("Comunicado removido.");
+      setConfirming(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <Badge className="mb-2 border-0 bg-primary/10 text-primary">
-            <Megaphone className="mr-1 h-3 w-3" /> Comunicação interna
+            <Megaphone className="mr-1 h-3 w-3" /> Boletim Conexão Feel
           </Badge>
-          <h1 className="font-display text-4xl font-bold">Comunicados</h1>
+          <h1 className="font-display text-4xl font-bold">Comunicados oficiais</h1>
           <p className="mt-1 text-muted-foreground">
-            Avisos oficiais, lançamentos e mudanças que impactam toda a Lunks.
+            Canal padronizado de comunicação interna entre todos os setores da Lunks Feel.
           </p>
         </div>
-        <div className="flex gap-2">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Buscar..." className="h-10 w-64 rounded-full pl-9" />
-          </div>
-          <Button variant="soft" size="default" className="rounded-full">
-            <Filter className="h-4 w-4" /> Filtrar
-          </Button>
-        </div>
+        <Button variant="hero" size="lg" onClick={handleNew}>
+          <Plus className="h-4 w-4" /> Novo comunicado
+        </Button>
       </div>
 
+      <div className="flex flex-wrap gap-2">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por título, conteúdo ou setor..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-11 rounded-full pl-9"
+          />
+        </div>
+        <Select value={filter} onValueChange={setFilter}>
+          <SelectTrigger className="h-11 w-44 rounded-full">
+            <SelectValue placeholder="Categoria" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas categorias</SelectItem>
+            <SelectItem value="Lançamento">Lançamento</SelectItem>
+            <SelectItem value="Operações">Operações</SelectItem>
+            <SelectItem value="Pessoas">Pessoas</SelectItem>
+            <SelectItem value="Regulatório">Regulatório</SelectItem>
+            <SelectItem value="Cultura">Cultura</SelectItem>
+            <SelectItem value="Diretoria">Diretoria</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {filtered.length === 0 && (
+        <Card className="border-dashed border-border p-12 text-center">
+          <p className="text-muted-foreground">Nenhum comunicado encontrado.</p>
+        </Card>
+      )}
+
       <div className="grid gap-4">
-        {items.map((it, i) => (
+        {filtered.map((it, i) => (
           <Card
-            key={it.title}
+            key={it.id}
             className="group border-border/60 p-6 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-warm"
-            style={{ animationDelay: `${i * 60}ms` }}
+            style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className="flex flex-col gap-4 md:flex-row md:items-start">
               <Avatar className="h-12 w-12 shrink-0">
@@ -94,8 +127,8 @@ const Comunicados = () => {
               </Avatar>
               <div className="min-w-0 flex-1">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className={it.color}>
-                    {it.tag}
+                  <Badge variant="outline" className={categoryStyle(it.category)}>
+                    {it.category}
                   </Badge>
                   {it.pinned && (
                     <Badge variant="outline" className="border-primary/30 bg-primary/5 text-primary">
@@ -103,23 +136,68 @@ const Comunicados = () => {
                     </Badge>
                   )}
                 </div>
-                <h3 className="font-display text-xl font-bold leading-tight text-foreground group-hover:text-primary">
+                <h3 className="font-display text-xl font-bold leading-tight text-foreground">
                   {it.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{it.excerpt}</p>
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                   <p className="text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">{it.author}</span> · {it.time}
+                    <span className="font-semibold text-foreground">{it.author}</span> ·{" "}
+                    {new Date(it.date).toLocaleDateString("pt-BR")}
                   </p>
-                  <Button variant="ghost" size="sm">
-                    Ler mais →
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        togglePin(it.id);
+                        toast.success(it.pinned ? "Desafixado" : "Fixado no topo");
+                      }}
+                    >
+                      <Pin className="h-4 w-4" />
+                      {it.pinned ? "Desafixar" : "Fixar"}
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleEdit(it)}>
+                      <Pencil className="h-4 w-4" /> Editar
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      onClick={() => setConfirming(it)}
+                    >
+                      <Trash2 className="h-4 w-4" /> Excluir
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </Card>
         ))}
       </div>
+
+      <AnnouncementForm open={open} onOpenChange={setOpen} editing={editing} />
+
+      <AlertDialog open={!!confirming} onOpenChange={(o) => !o && setConfirming(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir comunicado?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação removerá <strong>"{confirming?.title}"</strong> da intranet ConectaLunks.
+              Não poderá ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

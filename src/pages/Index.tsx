@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import heroImg from "@/assets/hero-connect.jpg";
 import { Link } from "react-router-dom";
-import { useAnnouncements, categoryStyle } from "@/store/announcements";
+import { useAnnouncementsCloud } from "@/hooks/usePortalData";
+import { useAuth } from "@/contexts/AuthContext";
 
 const kpis = [
   { label: "SIM Cards M2M ativos", value: "186K", trend: "+6,4% MoM", icon: Cpu },
@@ -31,8 +32,9 @@ const events = [
 ];
 
 const Index = () => {
-  const { announcements } = useAnnouncements();
-  const featured = [...announcements].sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned)).slice(0, 4);
+  const { data: announcements = [] } = useAnnouncementsCloud();
+  const { profile } = useAuth();
+  const featured = announcements.slice(0, 4);
 
   return (
     <div className="space-y-8">
@@ -48,7 +50,7 @@ const Index = () => {
         <div className="relative grid gap-6 p-8 md:grid-cols-2 md:p-12">
           <div className="text-primary-foreground">
             <Badge className="mb-4 border-0 bg-background/20 text-primary-foreground backdrop-blur-md">
-              <Sparkles className="mr-1 h-3 w-3" /> Bem-vindo, Higor
+              <Sparkles className="mr-1 h-3 w-3" /> Bem-vindo, {profile?.full_name?.split(" ")[0] ?? "colaborador"}
             </Badge>
             <h1 className="font-display text-4xl font-bold leading-[1.05] md:text-5xl">
               ConectaLunks. <em className="text-secondary not-italic">A intranet que integra todos os setores.</em>
@@ -116,18 +118,18 @@ const Index = () => {
               >
                 <Avatar className="h-10 w-10 shrink-0">
                   <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">
-                    {a.author.split(" ").map((s) => s[0]).join("").slice(0, 2)}
+                    {a.author_name.split(" ").map((s) => s[0]).join("").slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <Badge variant="outline" className={`mb-2 ${categoryStyle(a.category)}`}>
+                  <Badge variant="outline" className="mb-2 border-primary/20 bg-primary/5 text-primary">
                     {a.category}
                   </Badge>
                   <p className="font-medium leading-snug text-foreground group-hover:text-primary">
                     {a.title}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {a.author} · {new Date(a.date).toLocaleDateString("pt-BR")}
+                    {a.author_name} · {new Date(a.created_at).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
               </Link>

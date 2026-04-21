@@ -98,7 +98,8 @@ export function useCrud<T extends TableName>(table: T, queryKey: string) {
 
   const create = useMutation({
     mutationFn: async (payload: TablesInsert<T>) => {
-      const { error } = await supabase.from(table).insert({ ...payload, created_by: user?.id } as never);
+      const query = supabase.from(table) as any;
+      const { error } = await query.insert({ ...payload, created_by: user?.id });
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [queryKey] }),
@@ -106,7 +107,8 @@ export function useCrud<T extends TableName>(table: T, queryKey: string) {
 
   const update = useMutation({
     mutationFn: async ({ id, payload }: { id: string; payload: TablesUpdate<T> }) => {
-      const { error } = await supabase.from(table).update(payload as never).eq("id", id);
+      const query = supabase.from(table) as any;
+      const { error } = await query.update(payload).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [queryKey] }),
@@ -114,7 +116,8 @@ export function useCrud<T extends TableName>(table: T, queryKey: string) {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from(table).delete().eq("id", id);
+      const query = supabase.from(table) as any;
+      const { error } = await query.delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [queryKey] }),

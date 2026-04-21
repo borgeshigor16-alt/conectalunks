@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 import { useAuth } from "@/contexts/AuthContext";
 
+type TableName = "announcements" | "people" | "processes" | "knowledge_articles";
 export type SectorRow = Tables<"sectors">;
 export type AnnouncementRow = Tables<"announcements"> & { sectors?: Pick<SectorRow, "name" | "acronym"> | null };
 export type PersonRow = Tables<"people"> & { sectors?: Pick<SectorRow, "name" | "acronym"> | null };
@@ -10,7 +11,7 @@ export type ProcessRow = Tables<"processes"> & { sectors?: Pick<SectorRow, "name
 export type ArticleRow = Tables<"knowledge_articles"> & { sectors?: Pick<SectorRow, "name" | "acronym"> | null };
 export type NotificationRow = Tables<"notifications">;
 
-const ordered = <T>(items: T[] | null) => items ?? [];
+const ordered = <T,>(items: T[] | null) => items ?? [];
 
 export function useSectors() {
   return useQuery({
@@ -27,11 +28,7 @@ export function useAnnouncementsCloud() {
   return useQuery({
     queryKey: ["announcements"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("announcements")
-        .select("*, sectors(name, acronym)")
-        .order("pinned", { ascending: false })
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("announcements").select("*, sectors(name, acronym)").order("pinned", { ascending: false }).order("created_at", { ascending: false });
       if (error) throw error;
       return ordered(data as AnnouncementRow[] | null);
     },
@@ -95,12 +92,12 @@ export function useNotificationsCloud() {
   return { ...query, markRead };
 }
 
-export function useCrud(table: "announcements" | "people" | "processes" | "knowledge_articles", queryKey: string) {
+export function useCrud<T extends TableName>(table: T, queryKey: string) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
   const create = useMutation({
-    mutationFn: async (payload: TablesInsert<typeof table>) => {
+    mutationFn: async (payload: TablesInsert<T>) => {
       const { error } = await supabase.from(table).insert({ ...payload, created_by: user?.id } as never);
       if (error) throw error;
     },
@@ -108,7 +105,7 @@ export function useCrud(table: "announcements" | "people" | "processes" | "knowl
   });
 
   const update = useMutation({
-    mutationFn: async ({ id, payload }: { id: string; payload: TablesUpdate<typeof table> }) => {
+    mutationFn: async ({ id, payload }: { id: string; payload: TablesUpdate<T> }) => {
       const { error } = await supabase.from(table).update(payload as never).eq("id", id);
       if (error) throw error;
     },

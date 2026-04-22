@@ -16,7 +16,7 @@ const initials = (n: string) => n.split(" ").map((s) => s[0]).slice(0, 2).join("
 const Pessoas = () => {
   const { data: people = [] } = usePeopleCloud();
   const { data: sectors = [] } = useSectors();
-  const { canManageSector, profile } = useAuth();
+  const { canManageSector, canCreateContent, profile } = useAuth();
   const crud = useCrud("people", "people");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);

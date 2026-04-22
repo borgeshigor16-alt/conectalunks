@@ -15,6 +15,7 @@ interface AuthContextValue {
   sectors: Sector[];
   loading: boolean;
   isAdmin: boolean;
+  canCreateContent: boolean;
   canManageSector: (sectorId?: string | null) => boolean;
   refreshProfile: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;

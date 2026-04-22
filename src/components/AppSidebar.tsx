@@ -139,13 +139,18 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border p-3">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="rounded-xl text-sidebar-foreground/80 hover:bg-sidebar-accent">
-              <Settings className="h-5 w-5" />
-              {!collapsed && <span>Configurações</span>}
+            <SidebarMenuButton asChild>
+              <NavLink to="/configuracoes" className={navCls("/configuracoes")}>
+                <Settings className="h-5 w-5" />
+                {!collapsed && <span>Configurações</span>}
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton className="rounded-xl text-sidebar-foreground/80 hover:bg-sidebar-accent">
+            <SidebarMenuButton
+              className="rounded-xl text-sidebar-foreground/80 hover:bg-sidebar-accent"
+              onClick={async () => { await signOut(); navigate("/auth", { replace: true }); }}
+            >
               <LogOut className="h-5 w-5" />
               {!collapsed && <span>Sair</span>}
             </SidebarMenuButton>

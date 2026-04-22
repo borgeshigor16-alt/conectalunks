@@ -13,7 +13,7 @@ const categories = ["Manual", "Política", "FAQ", "Treinamento", "Pré-lançamen
 const Conhecimento = () => {
   const { data: articles = [] } = useKnowledgeCloud();
   const { data: sectors = [] } = useSectors();
-  const { canManageSector, profile } = useAuth();
+  const { canManageSector, canCreateContent, profile } = useAuth();
   const crud = useCrud("knowledge_articles", "knowledge");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);

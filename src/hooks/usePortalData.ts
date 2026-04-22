@@ -43,12 +43,18 @@ export function usePeopleCloud() {
       const full = await supabase.from("people").select("*, sectors(name, acronym)").order("full_name");
       const fullRows = (full.data ?? []) as PersonRow[];
 
-      // Carrega diretório público (sem contatos sensíveis) para complementar
-      const dir = await (supabase as any)
-        .from("people_directory")
-        .select("id, sector_id, full_name, position, active, created_at, updated_at, sectors(name, acronym)")
-        .order("full_name");
-      const dirRows = ((dir.data ?? []) as PersonRow[]).filter((d) => !fullRows.some((f) => f.id === d.id));
+      // Carrega diretório público (sem contatos sensíveis) e nomes de setores
+      const [dir, sectorsRes] = await Promise.all([
+        (supabase as any)
+          .from("people_directory")
+          .select("id, sector_id, full_name, position, active, created_at, updated_at")
+          .order("full_name"),
+        supabase.from("sectors").select("id, name, acronym"),
+      ]);
+      const sectorMap = new Map((sectorsRes.data ?? []).map((s: any) => [s.id, s]));
+      const dirRows = ((dir.data ?? []) as any[])
+        .filter((d) => !fullRows.some((f) => f.id === d.id))
+        .map((d) => ({ ...d, email: null, phone: null, extension: null, bio: null, sectors: sectorMap.get(d.sector_id) ?? null })) as PersonRow[];
 
       return [...fullRows, ...dirRows];
     },

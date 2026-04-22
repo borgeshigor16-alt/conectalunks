@@ -39,9 +39,18 @@ export function usePeopleCloud() {
   return useQuery({
     queryKey: ["people"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("people").select("*, sectors(name, acronym)").order("full_name");
-      if (error) throw error;
-      return ordered(data as PersonRow[] | null);
+      // Tenta carregar registros completos (com contatos) — só funciona para admins/editores do setor
+      const full = await supabase.from("people").select("*, sectors(name, acronym)").order("full_name");
+      const fullRows = (full.data ?? []) as PersonRow[];
+
+      // Carrega diretório público (sem contatos sensíveis) para complementar
+      const dir = await (supabase as any)
+        .from("people_directory")
+        .select("id, sector_id, full_name, position, active, created_at, updated_at, sectors(name, acronym)")
+        .order("full_name");
+      const dirRows = ((dir.data ?? []) as PersonRow[]).filter((d) => !fullRows.some((f) => f.id === d.id));
+
+      return [...fullRows, ...dirRows];
     },
   });
 }

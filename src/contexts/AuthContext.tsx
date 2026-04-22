@@ -15,6 +15,7 @@ interface AuthContextValue {
   sectors: Sector[];
   loading: boolean;
   isAdmin: boolean;
+  canCreateContent: boolean;
   canManageSector: (sectorId?: string | null) => boolean;
   refreshProfile: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
@@ -72,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<AuthContextValue>(() => {
     const isAdmin = roles.includes("admin");
+    const isEditor = roles.includes("editor");
     return {
       user,
       session,
@@ -80,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sectors,
       loading,
       isAdmin,
-      canManageSector: (sectorId) => Boolean(isAdmin || (roles.includes("editor") && sectorId && profile?.sector_id === sectorId)),
+      canCreateContent: isAdmin || (isEditor && Boolean(profile?.sector_id)),
+      canManageSector: (sectorId) => Boolean(isAdmin || (isEditor && sectorId && profile?.sector_id === sectorId)),
       refreshProfile,
       signIn: async (email, password) => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });

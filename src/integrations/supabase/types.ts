@@ -409,7 +409,44 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      people_directory: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          position: string | null
+          sector_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          position?: string | null
+          sector_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          position?: string | null
+          sector_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "people_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_manage_sector: { Args: { _sector_id: string }; Returns: boolean }

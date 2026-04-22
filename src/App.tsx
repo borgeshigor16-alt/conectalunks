@@ -14,6 +14,7 @@ import Processos from "./pages/Processos.tsx";
 import Conhecimento from "./pages/Conhecimento.tsx";
 import Pessoas from "./pages/Pessoas.tsx";
 import Indicadores from "./pages/Indicadores.tsx";
+import Papeis from "./pages/Papeis.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();

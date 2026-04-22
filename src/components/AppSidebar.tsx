@@ -9,7 +9,9 @@ import {
   Settings,
   LogOut,
   Gauge,
+  ShieldCheck,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Sidebar,
   SidebarContent,

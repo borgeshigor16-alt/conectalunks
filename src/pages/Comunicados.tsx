@@ -19,7 +19,7 @@ const initials = (name: string) => name.split(" ").map((s) => s[0]).join("").sli
 const Comunicados = () => {
   const { data: announcements = [], isLoading } = useAnnouncementsCloud();
   const { data: sectors = [] } = useSectors();
-  const { canManageSector, profile } = useAuth();
+  const { canManageSector, canCreateContent, profile } = useAuth();
   const crud = useCrud("announcements", "announcements");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AnnouncementRow | null>(null);

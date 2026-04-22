@@ -41,8 +41,10 @@ const Configuracoes = () => {
     if (!profile) return;
     setSavingProfile(true);
     try {
-      const updates: Record<string, unknown> = { full_name: fullName.trim(), position: position.trim() || null };
-      // Apenas admin pode alterar setor; demais usuários enviam o setor atual
+      const updates: { full_name: string; position: string | null; sector_id?: string | null } = {
+        full_name: fullName.trim(),
+        position: position.trim() || null,
+      };
       if (isAdmin) updates.sector_id = sectorId === "none" ? null : sectorId;
       const { error } = await supabase.from("profiles").update(updates).eq("user_id", profile.user_id);
       if (error) throw error;

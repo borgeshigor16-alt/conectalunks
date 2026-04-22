@@ -15,7 +15,7 @@ const statusStyle = (s: string) => s === "active" ? "bg-success/10 text-success 
 const Processos = () => {
   const { data: processes = [], isLoading } = useProcessesCloud();
   const { data: sectors = [] } = useSectors();
-  const { canManageSector, profile } = useAuth();
+  const { canManageSector, canCreateContent, profile } = useAuth();
   const crud = useCrud("processes", "processes");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<ProcessRow | null>(null);

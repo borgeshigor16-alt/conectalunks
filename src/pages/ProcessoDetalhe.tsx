@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { getStepSlaInfo } from "@/hooks/useSla";
 
 type StepStatus = "pending" | "in_progress" | "done";
 type InstanceStatus = "open" | "in_progress" | "completed" | "cancelled";
@@ -317,9 +318,30 @@ const ProcessoDetalhe = () => {
                           <p className="text-xs font-mono text-muted-foreground">Etapa {step.step_order}</p>
                           <h3 className="font-display text-lg font-semibold">{step.title}</h3>
                         </div>
-                        <Badge variant="outline" className={stepStatusStyle[status]}>
-                          {stepStatusLabel[status]}
-                        </Badge>
+                        <div className="flex flex-wrap items-center gap-1">
+                          {(() => {
+                            const sla = getStepSlaInfo(step);
+                            if (!sla) return null;
+                            if (sla.state === "overdue")
+                              return (
+                                <Badge variant="outline" className="border-destructive/30 bg-destructive/10 text-destructive">
+                                  <AlertTriangle className="mr-1 h-3 w-3" />
+                                  Atrasada {sla.hours < 1 ? `${Math.round(sla.hours * 60)}min` : `${sla.hours.toFixed(1)}h`}
+                                </Badge>
+                              );
+                            if (sla.state === "running")
+                              return (
+                                <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
+                                  <Clock className="mr-1 h-3 w-3" />
+                                  {sla.hours < 1 ? `${Math.round(sla.hours * 60)}min` : `${sla.hours.toFixed(1)}h`} restante(s)
+                                </Badge>
+                              );
+                            return null;
+                          })()}
+                          <Badge variant="outline" className={stepStatusStyle[status]}>
+                            {stepStatusLabel[status]}
+                          </Badge>
+                        </div>
                       </div>
                       {step.description && <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>}
                       <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">

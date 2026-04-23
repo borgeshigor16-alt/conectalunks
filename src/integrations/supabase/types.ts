@@ -250,6 +250,13 @@ export type Database = {
             foreignKeyName: "process_checklists_process_id_fkey"
             columns: ["process_id"]
             isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["process_id"]
+          },
+          {
+            foreignKeyName: "process_checklists_process_id_fkey"
+            columns: ["process_id"]
+            isOneToOne: false
             referencedRelation: "processes"
             referencedColumns: ["id"]
           },
@@ -306,6 +313,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "process_instances"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_checklist_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["instance_id"]
           },
         ]
       }
@@ -368,6 +382,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "process_instances"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_steps_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["instance_id"]
           },
           {
             foreignKeyName: "process_instance_steps_responsible_person_id_fkey"
@@ -440,6 +461,13 @@ export type Database = {
             foreignKeyName: "process_instances_process_id_fkey"
             columns: ["process_id"]
             isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["process_id"]
+          },
+          {
+            foreignKeyName: "process_instances_process_id_fkey"
+            columns: ["process_id"]
+            isOneToOne: false
             referencedRelation: "processes"
             referencedColumns: ["id"]
           },
@@ -496,6 +524,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "process_logs_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["instance_id"]
+          },
+          {
             foreignKeyName: "process_logs_step_id_fkey"
             columns: ["step_id"]
             isOneToOne: false
@@ -548,6 +583,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "sectors"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_steps_process_id_fkey"
+            columns: ["process_id"]
+            isOneToOne: false
+            referencedRelation: "process_sla_status"
+            referencedColumns: ["process_id"]
           },
           {
             foreignKeyName: "process_steps_process_id_fkey"
@@ -757,10 +799,61 @@ export type Database = {
           },
         ]
       }
+      process_sla_status: {
+        Row: {
+          current_step: Json | null
+          done_steps: number | null
+          instance_id: string | null
+          instance_status: Database["public"]["Enums"]["instance_status"] | null
+          instance_title: string | null
+          is_overdue: boolean | null
+          overdue_steps: number | null
+          process_code: string | null
+          process_id: string | null
+          process_name: string | null
+          sector_acronym: string | null
+          sector_id: string | null
+          sector_name: string | null
+          started_at: string | null
+          total_steps: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_instances_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      step_avg_duration: {
+        Row: {
+          avg_hours: number | null
+          avg_sla_hours: number | null
+          samples: number | null
+          step_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       can_manage_instance: { Args: { _instance_id: string }; Returns: boolean }
       can_manage_sector: { Args: { _sector_id: string }; Returns: boolean }
+      get_overdue_instances: {
+        Args: never
+        Returns: {
+          current_step: Json
+          instance_id: string
+          instance_title: string
+          overdue_steps: number
+          process_code: string
+          process_name: string
+          sector_acronym: string
+          sector_name: string
+          started_at: string
+        }[]
+      }
       get_user_sector: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {

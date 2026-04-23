@@ -16,6 +16,7 @@ import heroImg from "@/assets/hero-connect.jpg";
 import { Link } from "react-router-dom";
 import { useAnnouncementsCloud } from "@/hooks/usePortalData";
 import { useAuth } from "@/contexts/AuthContext";
+import { SlaAlerts } from "@/components/SlaAlerts";
 
 const kpis = [
   { label: "SIM Cards M2M ativos", value: "186K", trend: "+6,4% MoM", icon: Cpu },
@@ -95,6 +96,8 @@ const Index = () => {
           </Card>
         ))}
       </section>
+
+      <SlaAlerts />
 
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="border-border/60 p-6 shadow-soft lg:col-span-2">

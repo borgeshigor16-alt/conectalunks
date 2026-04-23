@@ -217,6 +217,283 @@ export type Database = {
           },
         ]
       }
+      process_checklists: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          item_order: number
+          process_id: string
+          required: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          item_order?: number
+          process_id: string
+          required?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          item_order?: number
+          process_id?: string
+          required?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_checklists_process_id_fkey"
+            columns: ["process_id"]
+            isOneToOne: false
+            referencedRelation: "processes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      process_instance_checklist: {
+        Row: {
+          checklist_template_id: string | null
+          completed: boolean
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          description: string
+          id: string
+          instance_id: string
+          item_order: number
+          required: boolean
+        }
+        Insert: {
+          checklist_template_id?: string | null
+          completed?: boolean
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          instance_id: string
+          item_order: number
+          required?: boolean
+        }
+        Update: {
+          checklist_template_id?: string | null
+          completed?: boolean
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          instance_id?: string
+          item_order?: number
+          required?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_instance_checklist_checklist_template_id_fkey"
+            columns: ["checklist_template_id"]
+            isOneToOne: false
+            referencedRelation: "process_checklists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_checklist_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_instances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      process_instance_steps: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          instance_id: string
+          notes: string | null
+          responsible_person_id: string | null
+          responsible_user_id: string | null
+          sla_hours: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["step_status"]
+          step_order: number
+          step_template_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instance_id: string
+          notes?: string | null
+          responsible_person_id?: string | null
+          responsible_user_id?: string | null
+          sla_hours?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["step_status"]
+          step_order: number
+          step_template_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instance_id?: string
+          notes?: string | null
+          responsible_person_id?: string | null
+          responsible_user_id?: string | null
+          sla_hours?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["step_status"]
+          step_order?: number
+          step_template_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_instance_steps_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_instances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_steps_responsible_person_id_fkey"
+            columns: ["responsible_person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_steps_responsible_person_id_fkey"
+            columns: ["responsible_person_id"]
+            isOneToOne: false
+            referencedRelation: "people_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instance_steps_step_template_id_fkey"
+            columns: ["step_template_id"]
+            isOneToOne: false
+            referencedRelation: "process_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      process_instances: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          process_id: string
+          sector_id: string
+          started_at: string
+          started_by: string | null
+          status: Database["public"]["Enums"]["instance_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          process_id: string
+          sector_id: string
+          started_at?: string
+          started_by?: string | null
+          status?: Database["public"]["Enums"]["instance_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          process_id?: string
+          sector_id?: string
+          started_at?: string
+          started_by?: string | null
+          status?: Database["public"]["Enums"]["instance_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_instances_process_id_fkey"
+            columns: ["process_id"]
+            isOneToOne: false
+            referencedRelation: "processes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instances_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      process_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          instance_id: string
+          performed_by: string | null
+          step_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          instance_id: string
+          performed_by?: string | null
+          step_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          instance_id?: string
+          performed_by?: string | null
+          step_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "process_logs_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "process_instances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_logs_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "process_instance_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       process_steps: {
         Row: {
           created_at: string
@@ -224,6 +501,8 @@ export type Database = {
           id: string
           owner_sector_id: string | null
           process_id: string
+          responsible_person_id: string | null
+          sla_hours: number | null
           step_order: number
           title: string
           updated_at: string
@@ -234,6 +513,8 @@ export type Database = {
           id?: string
           owner_sector_id?: string | null
           process_id: string
+          responsible_person_id?: string | null
+          sla_hours?: number | null
           step_order: number
           title: string
           updated_at?: string
@@ -244,6 +525,8 @@ export type Database = {
           id?: string
           owner_sector_id?: string | null
           process_id?: string
+          responsible_person_id?: string | null
+          sla_hours?: number | null
           step_order?: number
           title?: string
           updated_at?: string
@@ -261,6 +544,20 @@ export type Database = {
             columns: ["process_id"]
             isOneToOne: false
             referencedRelation: "processes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_steps_responsible_person_id_fkey"
+            columns: ["responsible_person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_steps_responsible_person_id_fkey"
+            columns: ["responsible_person_id"]
+            isOneToOne: false
+            referencedRelation: "people_directory"
             referencedColumns: ["id"]
           },
         ]
@@ -452,6 +749,7 @@ export type Database = {
       }
     }
     Functions: {
+      can_manage_instance: { Args: { _instance_id: string }; Returns: boolean }
       can_manage_sector: { Args: { _sector_id: string }; Returns: boolean }
       get_user_sector: { Args: { _user_id: string }; Returns: string }
       has_role: {
@@ -465,7 +763,9 @@ export type Database = {
     Enums: {
       app_role: "admin" | "editor" | "viewer"
       content_status: "draft" | "published" | "archived"
+      instance_status: "open" | "in_progress" | "completed" | "cancelled"
       process_status: "active" | "review" | "paused" | "archived"
+      step_status: "pending" | "in_progress" | "done"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -595,7 +895,9 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "editor", "viewer"],
       content_status: ["draft", "published", "archived"],
+      instance_status: ["open", "in_progress", "completed", "cancelled"],
       process_status: ["active", "review", "paused", "archived"],
+      step_status: ["pending", "in_progress", "done"],
     },
   },
 } as const

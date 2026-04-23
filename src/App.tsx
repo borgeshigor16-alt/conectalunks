@@ -11,6 +11,7 @@ import Index from "./pages/Index.tsx";
 import Comunicados from "./pages/Comunicados.tsx";
 import Setores from "./pages/Setores.tsx";
 import Processos from "./pages/Processos.tsx";
+import ProcessoDetalhe from "./pages/ProcessoDetalhe.tsx";
 import Conhecimento from "./pages/Conhecimento.tsx";
 import Pessoas from "./pages/Pessoas.tsx";
 import Indicadores from "./pages/Indicadores.tsx";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/comunicados" element={protectedApp(<Comunicados />)} />
             <Route path="/setores" element={protectedApp(<Setores />)} />
             <Route path="/processos" element={protectedApp(<Processos />)} />
+            <Route path="/processos/execucao/:id" element={protectedApp(<ProcessoDetalhe />)} />
             <Route path="/indicadores" element={protectedApp(<Indicadores />)} />
             <Route path="/conhecimento" element={protectedApp(<Conhecimento />)} />
             <Route path="/pessoas" element={protectedApp(<Pessoas />)} />

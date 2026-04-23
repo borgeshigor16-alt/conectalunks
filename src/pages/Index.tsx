@@ -98,6 +98,8 @@ const Index = () => {
       </section>
 
       <SlaAlerts />
+
+      <section className="grid gap-6 lg:grid-cols-3">
         <Card className="border-border/60 p-6 shadow-soft lg:col-span-2">
           <div className="mb-5 flex items-center justify-between">
             <div className="flex items-center gap-2">

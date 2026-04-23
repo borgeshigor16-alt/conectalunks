@@ -400,6 +400,7 @@ export type Database = {
           notes: string | null
           process_id: string
           sector_id: string
+          source_announcement_id: string | null
           started_at: string
           started_by: string | null
           status: Database["public"]["Enums"]["instance_status"]
@@ -413,6 +414,7 @@ export type Database = {
           notes?: string | null
           process_id: string
           sector_id: string
+          source_announcement_id?: string | null
           started_at?: string
           started_by?: string | null
           status?: Database["public"]["Enums"]["instance_status"]
@@ -426,6 +428,7 @@ export type Database = {
           notes?: string | null
           process_id?: string
           sector_id?: string
+          source_announcement_id?: string | null
           started_at?: string
           started_by?: string | null
           status?: Database["public"]["Enums"]["instance_status"]
@@ -445,6 +448,13 @@ export type Database = {
             columns: ["sector_id"]
             isOneToOne: false
             referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "process_instances_source_announcement_id_fkey"
+            columns: ["source_announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
             referencedColumns: ["id"]
           },
         ]

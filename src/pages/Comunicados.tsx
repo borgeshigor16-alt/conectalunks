@@ -12,8 +12,8 @@ import { AnnouncementRow, useAnnouncementsCloud, useCrud, useSectors } from "@/h
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-const categories = ["Lançamento", "Operações", "Pessoas", "Regulatório", "Cultura", "Diretoria"];
-const categoryStyle = (c: string) => ({ Lançamento: "bg-primary/10 text-primary border-primary/20", Operações: "bg-info/10 text-info border-info/20", Pessoas: "bg-secondary/20 text-secondary-foreground border-secondary/30", Regulatório: "bg-destructive/10 text-destructive border-destructive/20", Cultura: "bg-accent text-accent-foreground border-accent", Diretoria: "bg-success/10 text-success border-success/20" }[c] ?? "bg-muted text-muted-foreground border-border");
+const categories = ["Lançamento", "Lançamento de Produto", "Operações", "Pessoas", "Regulatório", "Cultura", "Diretoria"];
+const categoryStyle = (c: string) => ({ "Lançamento": "bg-primary/10 text-primary border-primary/20", "Lançamento de Produto": "bg-primary/15 text-primary border-primary/30", "Operações": "bg-info/10 text-info border-info/20", "Pessoas": "bg-secondary/20 text-secondary-foreground border-secondary/30", "Regulatório": "bg-destructive/10 text-destructive border-destructive/20", "Cultura": "bg-accent text-accent-foreground border-accent", "Diretoria": "bg-success/10 text-success border-success/20" }[c] ?? "bg-muted text-muted-foreground border-border");
 const initials = (name: string) => name.split(" ").map((s) => s[0]).join("").slice(0, 2);
 
 const Comunicados = () => {

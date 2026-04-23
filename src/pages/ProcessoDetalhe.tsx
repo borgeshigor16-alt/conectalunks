@@ -280,7 +280,7 @@ const ProcessoDetalhe = () => {
         <div className="space-y-4 lg:col-span-2">
           <h2 className="font-display text-xl font-bold">Linha do tempo</h2>
           {!checklistComplete && (
-            <Card className="flex items-center gap-3 border-warning/30 bg-warning/10 p-3 text-sm text-warning-foreground">
+            <Card className="flex items-center gap-3 border-secondary/40 bg-secondary/20 p-3 text-sm text-secondary-foreground">
               <Lock className="h-4 w-4 shrink-0" />
               <span>Conclua o checklist obrigatório para liberar o avanço das etapas.</span>
             </Card>
@@ -403,7 +403,7 @@ const ProcessoDetalhe = () => {
                       {item.description}
                     </p>
                     {item.required && !item.completed && (
-                      <span className="text-[10px] uppercase tracking-wider text-warning">Obrigatório</span>
+                      <span className="text-[10px] uppercase tracking-wider text-secondary-foreground">Obrigatório</span>
                     )}
                   </div>
                 </label>

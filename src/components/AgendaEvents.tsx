@@ -60,6 +60,7 @@ const toDatetimeLocal = (iso: string) => {
 export function AgendaEvents() {
   const { user, isAdmin } = useAuth();
   const [events, setEvents] = useState<AgendaEvent[]>([]);
+  const [indicators, setIndicators] = useState<PhaseIndicator[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AgendaEvent | null>(null);
@@ -72,15 +73,19 @@ export function AgendaEvents() {
 
   const load = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("agenda_events")
-      .select("*")
-      .order("event_at", { ascending: true });
-    if (error) {
+    const [{ data: evData, error: evErr }, { data: indData }] = await Promise.all([
+      supabase.from("agenda_events").select("*").order("event_at", { ascending: true }),
+      supabase
+        .from("indicators")
+        .select("id, name, progress, current_value, unit, positive, phase_event_id")
+        .not("phase_event_id", "is", null),
+    ]);
+    if (evErr) {
       toast.error("Erro ao carregar agenda");
     } else {
-      setEvents(data ?? []);
+      setEvents(evData ?? []);
     }
+    setIndicators((indData ?? []) as PhaseIndicator[]);
     setLoading(false);
   };
 

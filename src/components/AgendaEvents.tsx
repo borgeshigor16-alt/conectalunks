@@ -23,7 +23,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Calendar, Pencil, Plus, Trash2 } from "lucide-react";
+import { Calendar, Gauge, Pencil, Plus, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -34,6 +37,16 @@ interface AgendaEvent {
   description: string | null;
   location: string | null;
   event_at: string;
+}
+
+interface PhaseIndicator {
+  id: string;
+  name: string;
+  progress: number;
+  current_value: number;
+  unit: string;
+  positive: boolean;
+  phase_event_id: string | null;
 }
 
 const MONTHS = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];

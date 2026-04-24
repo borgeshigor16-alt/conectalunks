@@ -100,6 +100,68 @@ export type Database = {
           },
         ]
       }
+      indicators: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_value: number
+          delta: string
+          description: string
+          display_order: number
+          id: string
+          name: string
+          period: string
+          phase_event_id: string | null
+          positive: boolean
+          progress: number
+          target: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          delta?: string
+          description?: string
+          display_order?: number
+          id?: string
+          name: string
+          period?: string
+          phase_event_id?: string | null
+          positive?: boolean
+          progress?: number
+          target?: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          delta?: string
+          description?: string
+          display_order?: number
+          id?: string
+          name?: string
+          period?: string
+          phase_event_id?: string | null
+          positive?: boolean
+          progress?: number
+          target?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indicators_phase_event_id_fkey"
+            columns: ["phase_event_id"]
+            isOneToOne: false
+            referencedRelation: "agenda_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_articles: {
         Row: {
           category: string

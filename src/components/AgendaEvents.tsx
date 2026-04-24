@@ -23,7 +23,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Calendar, Pencil, Plus, Trash2 } from "lucide-react";
+import { Calendar, Gauge, Pencil, Plus, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -34,6 +37,16 @@ interface AgendaEvent {
   description: string | null;
   location: string | null;
   event_at: string;
+}
+
+interface PhaseIndicator {
+  id: string;
+  name: string;
+  progress: number;
+  current_value: number;
+  unit: string;
+  positive: boolean;
+  phase_event_id: string | null;
 }
 
 const MONTHS = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -47,6 +60,7 @@ const toDatetimeLocal = (iso: string) => {
 export function AgendaEvents() {
   const { user, isAdmin } = useAuth();
   const [events, setEvents] = useState<AgendaEvent[]>([]);
+  const [indicators, setIndicators] = useState<PhaseIndicator[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AgendaEvent | null>(null);
@@ -59,15 +73,19 @@ export function AgendaEvents() {
 
   const load = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("agenda_events")
-      .select("*")
-      .order("event_at", { ascending: true });
-    if (error) {
+    const [{ data: evData, error: evErr }, { data: indData }] = await Promise.all([
+      supabase.from("agenda_events").select("*").order("event_at", { ascending: true }),
+      supabase
+        .from("indicators")
+        .select("id, name, progress, current_value, unit, positive, phase_event_id")
+        .not("phase_event_id", "is", null),
+    ]);
+    if (evErr) {
       toast.error("Erro ao carregar agenda");
     } else {
-      setEvents(data ?? []);
+      setEvents(evData ?? []);
     }
+    setIndicators((indData ?? []) as PhaseIndicator[]);
     setLoading(false);
   };
 
@@ -204,6 +222,7 @@ export function AgendaEvents() {
             const day = String(d.getDate()).padStart(2, "0");
             const month = MONTHS[d.getMonth()];
             const time = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+            const linked = indicators.filter((i) => i.phase_event_id === e.id);
             return (
               <div key={e.id} className="group flex items-start gap-4">
                 <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-warm text-primary-foreground shadow-warm">
@@ -218,6 +237,42 @@ export function AgendaEvents() {
                   </p>
                   {e.description && (
                     <p className="mt-1 text-xs text-muted-foreground/90">{e.description}</p>
+                  )}
+                  {linked.length > 0 && (
+                    <div className="mt-3 space-y-2 rounded-lg border border-border/60 bg-muted/40 p-3">
+                      <div className="flex items-center justify-between">
+                        <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          <Gauge className="h-3 w-3" /> Indicadores desta fase
+                        </p>
+                        <Link
+                          to="/indicadores"
+                          className="text-[10px] font-semibold text-primary hover:underline"
+                        >
+                          Ver todos →
+                        </Link>
+                      </div>
+                      {linked.map((ind) => (
+                        <div key={ind.id} className="space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="truncate text-xs font-medium text-foreground">
+                              {ind.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className={
+                                ind.positive
+                                  ? "shrink-0 border-success/30 bg-success/10 text-[10px] text-success"
+                                  : "shrink-0 border-destructive/30 bg-destructive/10 text-[10px] text-destructive"
+                              }
+                            >
+                              {ind.current_value}
+                              {ind.unit}
+                            </Badge>
+                          </div>
+                          <Progress value={ind.progress} className="h-1.5" />
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
                 {isAdmin && (

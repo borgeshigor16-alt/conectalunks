@@ -66,9 +66,9 @@ export function AppSidebar() {
           {!collapsed && (
             <div className="overflow-hidden">
               <p className="font-display text-base font-bold leading-tight text-sidebar-foreground">
-                ConectaLunks
+                Conecta Lunks
               </p>
-              <p className="text-xs text-sidebar-foreground/60">Intranet · Lunks Feel</p>
+              <p className="text-xs text-sidebar-foreground/60">Operações & Comunicação · Lunks Feel</p>
             </div>
           )}
         </div>

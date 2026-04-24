@@ -222,6 +222,7 @@ export function AgendaEvents() {
             const day = String(d.getDate()).padStart(2, "0");
             const month = MONTHS[d.getMonth()];
             const time = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+            const linked = indicators.filter((i) => i.phase_event_id === e.id);
             return (
               <div key={e.id} className="group flex items-start gap-4">
                 <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-warm text-primary-foreground shadow-warm">
@@ -236,6 +237,42 @@ export function AgendaEvents() {
                   </p>
                   {e.description && (
                     <p className="mt-1 text-xs text-muted-foreground/90">{e.description}</p>
+                  )}
+                  {linked.length > 0 && (
+                    <div className="mt-3 space-y-2 rounded-lg border border-border/60 bg-muted/40 p-3">
+                      <div className="flex items-center justify-between">
+                        <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          <Gauge className="h-3 w-3" /> Indicadores desta fase
+                        </p>
+                        <Link
+                          to="/indicadores"
+                          className="text-[10px] font-semibold text-primary hover:underline"
+                        >
+                          Ver todos →
+                        </Link>
+                      </div>
+                      {linked.map((ind) => (
+                        <div key={ind.id} className="space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="truncate text-xs font-medium text-foreground">
+                              {ind.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className={
+                                ind.positive
+                                  ? "shrink-0 border-success/30 bg-success/10 text-[10px] text-success"
+                                  : "shrink-0 border-destructive/30 bg-destructive/10 text-[10px] text-destructive"
+                              }
+                            >
+                              {ind.current_value}
+                              {ind.unit}
+                            </Badge>
+                          </div>
+                          <Progress value={ind.progress} className="h-1.5" />
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
                 {isAdmin && (

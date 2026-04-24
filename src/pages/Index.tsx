@@ -9,7 +9,6 @@ import {
   Activity,
   Globe2,
   Sparkles,
-  Calendar,
   Megaphone,
 } from "lucide-react";
 import heroImg from "@/assets/hero-connect.jpg";
@@ -17,19 +16,13 @@ import { Link } from "react-router-dom";
 import { useAnnouncementsCloud } from "@/hooks/usePortalData";
 import { useAuth } from "@/contexts/AuthContext";
 import { SlaAlerts } from "@/components/SlaAlerts";
+import { AgendaEvents } from "@/components/AgendaEvents";
 
 const kpis = [
-  { label: "SIM Cards M2M ativos", value: "186K", trend: "+6,4% MoM", icon: Cpu },
-  { label: "Colaboradores", value: "62", trend: "+2 novos", icon: Users },
-  { label: "Países FL+LATAM", value: "14", trend: "+ Chile, Peru", icon: Globe2 },
-  { label: "Engajamento intranet", value: "78%", trend: "Meta ≥ 80%", icon: Activity },
-];
-
-const events = [
-  { day: "23", month: "ABR", title: "Workshop sensibilização — Fase 1", time: "10h00 · Aud. Vergueiro" },
-  { day: "28", month: "ABR", title: "'Fala com a Diretoria' — Q1/2026", time: "14h00 · Online" },
-  { day: "05", month: "MAI", title: "Comitê Intersetorial #02", time: "09h00 · Sala Conexão" },
-  { day: "10", month: "MAI", title: "Treinamento Anatel — Suporte", time: "13h30 · Sala Apólo" },
+  { label: "SIM Cards M2M ativos", value: "600K", trend: "Base ativa", icon: Cpu },
+  { label: "Colaboradores", value: "31", trend: "+2 novos", icon: Users },
+  { label: "Países FL+LATAM", value: "5", trend: "+ Venezuela", icon: Globe2 },
+  { label: "Engajamento ConectaLunks", value: "70%", trend: "Meta ≥ 85%", icon: Activity },
 ];
 
 const Index = () => {
@@ -54,11 +47,10 @@ const Index = () => {
               <Sparkles className="mr-1 h-3 w-3" /> Bem-vindo, {profile?.full_name?.split(" ")[0] ?? "colaborador"}
             </Badge>
             <h1 className="font-display text-4xl font-bold leading-[1.05] md:text-5xl">
-              ConectaLunks. <em className="text-secondary not-italic">A intranet que integra todos os setores.</em>
+              ConectaLunks. <em className="text-secondary not-italic">Integrando os setores.</em>
             </h1>
             <p className="mt-4 max-w-md text-base text-primary-foreground/85">
-              Plano de comunicação integrada interna desenvolvido pela <strong>Entrementes HB</strong> para
-              fortalecer a Lunks Feel do Brasil — MVNO de M2M e IoT.
+              Comunicação integrada interna <strong>Lunks Feel MVNO</strong> — By <strong>Entrementes HB</strong>.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button variant="hero" size="lg" asChild>
@@ -140,26 +132,7 @@ const Index = () => {
           </div>
         </Card>
 
-        <Card className="border-border/60 p-6 shadow-soft">
-          <div className="mb-5 flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary" />
-            <h2 className="font-display text-xl font-bold">Agenda da Fase 1</h2>
-          </div>
-          <div className="space-y-4">
-            {events.map((e) => (
-              <div key={e.title} className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-warm text-primary-foreground shadow-warm">
-                  <span className="font-display text-lg font-bold leading-none">{e.day}</span>
-                  <span className="text-[10px] font-semibold tracking-wider">{e.month}</span>
-                </div>
-                <div className="pt-1">
-                  <p className="font-medium leading-tight text-foreground">{e.title}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{e.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+        <AgendaEvents />
       </section>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   LogOut,
   Gauge,
   ShieldCheck,
+  MessageSquareHeart,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {

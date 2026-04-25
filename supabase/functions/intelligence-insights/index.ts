@@ -73,6 +73,8 @@ Deno.serve(async (req) => {
       avgRes,
       overdueRes,
       logsRes,
+      feedbackIdxRes,
+      feedbackRecentRes,
     ] = await Promise.all([
       admin.from("sectors").select("id, name, acronym, active").eq("active", true),
       admin
@@ -88,6 +90,12 @@ Deno.serve(async (req) => {
         .select("action, details, created_at, instance_id")
         .order("created_at", { ascending: false })
         .limit(200),
+      admin.rpc("get_feedback_indices", { _days: 90 }),
+      admin
+        .from("feedbacks")
+        .select("target_kind, sentiment, ai_tags, ai_summary, clarity_score, alignment_score, satisfaction_score, created_at")
+        .order("created_at", { ascending: false })
+        .limit(120),
     ]);
 
     const sectors = sectorsRes.data ?? [];
@@ -96,6 +104,8 @@ Deno.serve(async (req) => {
     const avgDur = (avgRes.data ?? []) as any[];
     const overdue = (overdueRes.data ?? []) as any[];
     const logs = (logsRes.data ?? []) as any[];
+    const feedbackIndices = (feedbackIdxRes.data ?? [])[0] ?? null;
+    const feedbacks = (feedbackRecentRes.data ?? []) as any[];
 
     // 2) Estatísticas pré-computadas
     const totalInstances = slaStatus.length;

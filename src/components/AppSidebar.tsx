@@ -33,6 +33,7 @@ const mainItems = [
   { title: "Setores", url: "/setores", icon: Building2 },
   { title: "Processos", url: "/processos", icon: Workflow },
   { title: "Indicadores", url: "/indicadores", icon: Gauge },
+  { title: "Feedback", url: "/feedback", icon: MessageSquareHeart },
 ];
 
 const secondaryItems = [

@@ -90,6 +90,8 @@ const Index = () => {
         ))}
       </section>
 
+      <IntelligenceDashboard />
+
       <SlaAlerts />
 
       <section className="grid gap-6 lg:grid-cols-3">

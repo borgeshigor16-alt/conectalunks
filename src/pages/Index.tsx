@@ -17,6 +17,7 @@ import { useAnnouncementsCloud } from "@/hooks/usePortalData";
 import { useAuth } from "@/contexts/AuthContext";
 import { SlaAlerts } from "@/components/SlaAlerts";
 import { AgendaEvents } from "@/components/AgendaEvents";
+import { IntelligenceDashboard } from "@/components/IntelligenceDashboard";
 
 const kpis = [
   { label: "SIM Cards M2M ativos", value: "600K", trend: "Base ativa", icon: Cpu },
@@ -88,6 +89,8 @@ const Index = () => {
           </Card>
         ))}
       </section>
+
+      <IntelligenceDashboard />
 
       <SlaAlerts />
 

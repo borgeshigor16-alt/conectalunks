@@ -139,6 +139,66 @@ export type Database = {
           },
         ]
       }
+      feedbacks: {
+        Row: {
+          ai_summary: string | null
+          ai_tags: string[]
+          alignment_score: number | null
+          announcement_id: string | null
+          clarity_score: number | null
+          comment: string | null
+          created_at: string
+          created_by: string
+          id: string
+          process_instance_id: string | null
+          reference_period: string | null
+          satisfaction_score: number | null
+          sector_id: string | null
+          sentiment: Database["public"]["Enums"]["feedback_sentiment"] | null
+          sentiment_confidence: number | null
+          target_kind: Database["public"]["Enums"]["feedback_target"]
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          ai_tags?: string[]
+          alignment_score?: number | null
+          announcement_id?: string | null
+          clarity_score?: number | null
+          comment?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          process_instance_id?: string | null
+          reference_period?: string | null
+          satisfaction_score?: number | null
+          sector_id?: string | null
+          sentiment?: Database["public"]["Enums"]["feedback_sentiment"] | null
+          sentiment_confidence?: number | null
+          target_kind: Database["public"]["Enums"]["feedback_target"]
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          ai_tags?: string[]
+          alignment_score?: number | null
+          announcement_id?: string | null
+          clarity_score?: number | null
+          comment?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          process_instance_id?: string | null
+          reference_period?: string | null
+          satisfaction_score?: number | null
+          sector_id?: string | null
+          sentiment?: Database["public"]["Enums"]["feedback_sentiment"] | null
+          sentiment_confidence?: number | null
+          target_kind?: Database["public"]["Enums"]["feedback_target"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       indicators: {
         Row: {
           created_at: string
@@ -974,6 +1034,19 @@ export type Database = {
     Functions: {
       can_manage_instance: { Args: { _instance_id: string }; Returns: boolean }
       can_manage_sector: { Args: { _sector_id: string }; Returns: boolean }
+      get_feedback_indices: {
+        Args: { _days?: number }
+        Returns: {
+          alignment_index: number
+          by_kind: Json
+          clarity_index: number
+          negative_pct: number
+          neutral_pct: number
+          positive_pct: number
+          satisfaction_index: number
+          total_feedbacks: number
+        }[]
+      }
       get_overdue_instances: {
         Args: never
         Returns: {
@@ -1000,6 +1073,8 @@ export type Database = {
     Enums: {
       app_role: "admin" | "editor" | "viewer"
       content_status: "draft" | "published" | "archived"
+      feedback_sentiment: "positive" | "neutral" | "negative"
+      feedback_target: "process" | "sector" | "announcement"
       instance_status: "open" | "in_progress" | "completed" | "cancelled"
       process_status: "active" | "review" | "paused" | "archived"
       step_status: "pending" | "in_progress" | "done"
@@ -1132,6 +1207,8 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "editor", "viewer"],
       content_status: ["draft", "published", "archived"],
+      feedback_sentiment: ["positive", "neutral", "negative"],
+      feedback_target: ["process", "sector", "announcement"],
       instance_status: ["open", "in_progress", "completed", "cancelled"],
       process_status: ["active", "review", "paused", "archived"],
       step_status: ["pending", "in_progress", "done"],

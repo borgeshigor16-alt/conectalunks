@@ -17,6 +17,7 @@ import Pessoas from "./pages/Pessoas.tsx";
 import Indicadores from "./pages/Indicadores.tsx";
 import Papeis from "./pages/Papeis.tsx";
 import Configuracoes from "./pages/Configuracoes.tsx";
+import Feedback from "./pages/Feedback.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/pessoas" element={protectedApp(<Pessoas />)} />
             <Route path="/papeis" element={protectedApp(<Papeis />)} />
             <Route path="/configuracoes" element={protectedApp(<Configuracoes />)} />
+            <Route path="/feedback" element={protectedApp(<Feedback />)} />
             <Route path="*" element={protectedApp(<NotFound />)} />
           </Routes>
         </BrowserRouter>

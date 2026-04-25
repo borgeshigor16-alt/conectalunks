@@ -47,6 +47,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_insights: {
+        Row: {
+          batch_id: string
+          created_at: string
+          description: string
+          framework_reference: string | null
+          id: string
+          kind: string
+          metrics: Json
+          related_sectors: string[]
+          severity: string
+          title: string
+        }
+        Insert: {
+          batch_id: string
+          created_at?: string
+          description: string
+          framework_reference?: string | null
+          id?: string
+          kind: string
+          metrics?: Json
+          related_sectors?: string[]
+          severity?: string
+          title: string
+        }
+        Update: {
+          batch_id?: string
+          created_at?: string
+          description?: string
+          framework_reference?: string | null
+          id?: string
+          kind?: string
+          metrics?: Json
+          related_sectors?: string[]
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
       announcements: {
         Row: {
           author_name: string

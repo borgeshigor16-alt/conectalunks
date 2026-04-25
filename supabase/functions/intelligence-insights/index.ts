@@ -147,6 +147,26 @@ Deno.serve(async (req) => {
     const logActionCounts: Record<string, number> = {};
     for (const l of logs) logActionCounts[l.action] = (logActionCounts[l.action] ?? 0) + 1;
 
+    // Agregação de feedback por tipo de alvo + tags mais frequentes em itens negativos
+    const feedbackByKind: Record<string, { count: number; neg: number; avg_satisfaction: number | null }> = {};
+    const negTagCounts: Record<string, number> = {};
+    let satSum = 0, satN = 0;
+    for (const f of feedbacks) {
+      const k = f.target_kind;
+      feedbackByKind[k] ??= { count: 0, neg: 0, avg_satisfaction: null };
+      feedbackByKind[k].count += 1;
+      if (f.sentiment === "negative") feedbackByKind[k].neg += 1;
+      if (typeof f.satisfaction_score === "number") {
+        satSum += f.satisfaction_score; satN += 1;
+      }
+      if (f.sentiment === "negative" && Array.isArray(f.ai_tags)) {
+        for (const t of f.ai_tags) negTagCounts[t] = (negTagCounts[t] ?? 0) + 1;
+      }
+    }
+    const topNegativeTags = Object.entries(negTagCounts)
+      .sort((a, b) => b[1] - a[1]).slice(0, 6)
+      .map(([tag, count]) => ({ tag, count }));
+
     const dataset = {
       generated_at: new Date().toISOString(),
       summary: {
@@ -155,6 +175,7 @@ Deno.serve(async (req) => {
         total_process_instances: totalInstances,
         overdue_instances: overdueInstances,
         overdue_percentage: overduePct,
+        feedback_total_90d: feedbackIndices?.total_feedbacks ?? 0,
       },
       sectors: sectors.map((s) => ({ name: s.name, acronym: s.acronym })),
       sector_overdue: sectorOverduePct,
@@ -168,6 +189,15 @@ Deno.serve(async (req) => {
         current_step: o.current_step?.title ?? null,
       })),
       log_action_counts: logActionCounts,
+      feedback: {
+        indices: feedbackIndices,
+        by_kind: feedbackByKind,
+        top_negative_tags: topNegativeTags,
+        recent_negative_summaries: feedbacks
+          .filter((f) => f.sentiment === "negative" && f.ai_summary)
+          .slice(0, 8)
+          .map((f) => ({ kind: f.target_kind, summary: f.ai_summary })),
+      },
     };
 
     // 3) Chama Lovable AI com tool calling (saída estruturada)

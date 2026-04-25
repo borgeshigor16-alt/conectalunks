@@ -47,6 +47,7 @@ const App = () => (
             <Route path="/pessoas" element={protectedApp(<Pessoas />)} />
             <Route path="/papeis" element={protectedApp(<Papeis />)} />
             <Route path="/configuracoes" element={protectedApp(<Configuracoes />)} />
+            <Route path="/feedback" element={protectedApp(<Feedback />)} />
             <Route path="*" element={protectedApp(<NotFound />)} />
           </Routes>
         </BrowserRouter>

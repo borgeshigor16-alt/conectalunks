@@ -18,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SlaAlerts } from "@/components/SlaAlerts";
 import { AgendaEvents } from "@/components/AgendaEvents";
 import { IntelligenceDashboard } from "@/components/IntelligenceDashboard";
+import { FeedbackIndicesPanel } from "@/components/FeedbackIndicesPanel";
 
 const kpis = [
   { label: "SIM Cards M2M ativos", value: "600K", trend: "Base ativa", icon: Cpu },

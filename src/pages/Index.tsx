@@ -52,7 +52,7 @@ const Index = () => {
               ConectaLunks. <em className="text-secondary not-italic">Integrando os setores.</em>
             </h1>
             <p className="mt-4 max-w-md text-base text-primary-foreground/85">
-              Comunicação integrada interna <strong>Lunks Feel MVNO</strong> — By <strong>Entrementes HB</strong>.
+              Plataforma de comunicação integrada interna da <strong>Lunks Feel do Brasil</strong> — operadora MVNO de conectividade M2M e IoT. Preparando a empresa para o lançamento do <strong>Hey Apólo SAT</strong>. By <strong>Entrementes HB</strong>.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button variant="hero" size="lg" asChild>

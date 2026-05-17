@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   ArrowUpRight,
-  Cpu,
+  Building2,
   Users,
   Activity,
-  Globe2,
+  Satellite,
   Sparkles,
   Megaphone,
 } from "lucide-react";

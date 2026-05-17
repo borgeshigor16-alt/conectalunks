@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   ArrowUpRight,
-  Cpu,
+  Building2,
   Users,
   Activity,
-  Globe2,
+  Satellite,
   Sparkles,
   Megaphone,
 } from "lucide-react";
@@ -21,10 +21,10 @@ import { IntelligenceDashboard } from "@/components/IntelligenceDashboard";
 import { FeedbackIndicesPanel } from "@/components/FeedbackIndicesPanel";
 
 const kpis = [
-  { label: "SIM Cards M2M ativos", value: "600K", trend: "Base ativa", icon: Cpu },
-  { label: "Colaboradores", value: "31", trend: "+2 novos", icon: Users },
-  { label: "Países FL+LATAM", value: "5", trend: "+ Venezuela", icon: Globe2 },
-  { label: "Engajamento ConectaLunks", value: "70%", trend: "Meta ≥ 85%", icon: Activity },
+  { label: "Colaboradores Lunks Feel", value: "~30", trend: "Estrutura de médio porte", icon: Users },
+  { label: "Setores integrados", value: "8", trend: "Mapeados no diagnóstico", icon: Building2 },
+  { label: "Próximo lançamento", value: "Hey Apólo SAT", trend: "Conectividade IoT via satélite", icon: Satellite },
+  { label: "Meta de adesão ConectaLunks", value: "≥ 80%", trend: "Campanha Conecta Lunks", icon: Activity },
 ];
 
 const Index = () => {
@@ -52,7 +52,7 @@ const Index = () => {
               ConectaLunks. <em className="text-secondary not-italic">Integrando os setores.</em>
             </h1>
             <p className="mt-4 max-w-md text-base text-primary-foreground/85">
-              Comunicação integrada interna <strong>Lunks Feel MVNO</strong> — By <strong>Entrementes HB</strong>.
+              Plataforma de comunicação integrada interna da <strong>Lunks Feel do Brasil</strong> — operadora MVNO de conectividade M2M e IoT. Preparando a empresa para o lançamento do <strong>Hey Apólo SAT</strong>. By <strong>Entrementes HB</strong>.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button variant="hero" size="lg" asChild>
